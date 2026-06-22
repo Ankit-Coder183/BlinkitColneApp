@@ -1,6 +1,4 @@
-import React from "react";
-
-function Header() {
+function Header({ cartCount }) {
   return (
     <header className="w-full bg-yellow-400 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -26,11 +24,13 @@ function Header() {
         </div>
 
         {/* Login */}
-        <button className="font-semibold text-black">Login</button>
+        <button className="font-semibold text-black">
+          Login
+        </button>
 
         {/* Cart */}
         <button className="bg-green-600 text-white px-5 py-3 rounded-lg font-semibold">
-          Cart
+          Cart ({cartCount})
         </button>
       </div>
     </header>

@@ -1,17 +1,22 @@
-import React from "react";
 import Header from "../Components/Header";
 import Hero from "../Components/Hero";
 import ProductCards from "../Components/ProductCards";
 import TopProducts from "../Components/TopProducts";
 import Footer from "../Components/Footer";
 
-function Home() {
+function Home({ cart, addToCart, removeFromCart }) {
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
   return (
     <>
-      <Header />
+      <Header cartCount={totalItems} />
       <Hero />
       <ProductCards />
-      <TopProducts />
+      <TopProducts
+        cart={cart}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
+      />
       <Footer />
     </>
   );
