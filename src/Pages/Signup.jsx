@@ -5,19 +5,45 @@ function Signup() {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
-  const handleSignup = () => {
-    if (!name || !password) {
-      alert("Please fill all fields");
+  const handleSignup = async () => {
+    if (!name || !email || !password) {
+      alert("Please fill required fields");
       return;
     }
 
-    const user = { name, password };
-    localStorage.setItem("user", JSON.stringify(user));
+    try {
+      const response = await fetch("http://localhost:5000/api/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phone,
+          address
+        })
+      });
 
-    alert("Signup Successful");
-    navigate("/login");
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        alert("Signup Successful");
+        navigate("/login");
+      } else {
+        alert(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Server Error");
+    }
   };
 
   return (
@@ -27,17 +53,41 @@ function Signup() {
 
         <input
           type="text"
-          placeholder="Create Username"
+          placeholder="Username"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full border p-3 rounded mb-4"
         />
 
         <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border p-3 rounded mb-4"
+        />
+
+        <input
           type="password"
-          placeholder="Create Password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full border p-3 rounded mb-4"
+        />
+
+        <input
+          type="text"
+          placeholder="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="w-full border p-3 rounded mb-4"
+        />
+
+        <input
+          type="text"
+          placeholder="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           className="w-full border p-3 rounded mb-4"
         />
 
@@ -62,4 +112,4 @@ function Signup() {
   );
 }
 
-export default Signup; 
+export default Signup;

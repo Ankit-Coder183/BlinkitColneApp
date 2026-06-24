@@ -4,26 +4,42 @@ import { useNavigate } from "react-router-dom";
 function Loginpage({ setIsLoggedIn }) {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (!savedUser) {
-      alert("No account found. Please signup first.");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please fill all fields");
       return;
     }
 
-    if (
-      savedUser.name === name &&
-      savedUser.password === password
-    ) {
-      setIsLoggedIn(true);
-      alert("Login Successful");
-      navigate("/");
-    } else {
-      alert("Wrong Username or Password");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/customers/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsLoggedIn(true);
+        alert("Login Successful");
+        navigate("/");
+      } else {
+        alert(data.message || "Login Failed");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Server Error");
     }
   };
 
@@ -33,10 +49,10 @@ function Loginpage({ setIsLoggedIn }) {
         <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
 
         <input
-          type="text"
-          placeholder="Enter Username"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full border p-3 rounded mb-4"
         />
 
