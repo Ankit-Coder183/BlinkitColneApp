@@ -1,11 +1,23 @@
-function Header({ cartCount }) {
+import { useNavigate } from "react-router-dom";
+
+function Header({ cartCount, isLoggedIn, setIsLoggedIn }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
   return (
     <header className="w-full bg-yellow-400 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-        
+
         {/* Logo */}
-        <div className="text-3xl font-extrabold text-black">
-          blink<span className="text-green-600">it</span>
+        <div
+          onClick={() => navigate("/")}
+          className="text-3xl font-extrabold text-black cursor-pointer"
+        >
+          Akki<span className="text-green-600">Mart</span>
         </div>
 
         {/* Location */}
@@ -23,10 +35,24 @@ function Header({ cartCount }) {
           />
         </div>
 
-        {/* Login */}
-        <button className="font-semibold text-black">
-          Login
-        </button>
+        {/* Login / Logout */}
+        <div>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="font-semibold text-red-600"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="font-semibold text-black"
+            >
+              Login
+            </button>
+          )}
+        </div>
 
         {/* Cart */}
         <button className="bg-green-600 text-white px-5 py-3 rounded-lg font-semibold">

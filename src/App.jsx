@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
 import Home from "./Pages/Home";
 import ProductDetails from "./Pages/ProductDetails";
+import Loginpage from "./Pages/Loginpage";
+import Signup from "./Pages/Signup";
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Add product / increase quantity
   const addToCart = (product) => {
     setCart((prev) => {
       const existing = prev.find(
@@ -25,7 +28,6 @@ function App() {
     });
   };
 
-  // Remove product / decrease quantity
   const removeFromCart = (productName) => {
     setCart((prev) =>
       prev
@@ -47,11 +49,19 @@ function App() {
             cart={cart}
             addToCart={addToCart}
             removeFromCart={removeFromCart}
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
           />
         }
       />
 
       <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/signup" element={<Signup />} />
+
+      <Route
+        path="/login"
+        element={<Loginpage setIsLoggedIn={setIsLoggedIn} />}
+      />
     </Routes>
   );
 }
